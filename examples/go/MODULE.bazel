@@ -1,0 +1,29 @@
+module(
+    name = "com_github_pedrobarco_gazelle_oci_examples_go",
+    version = "1.0",
+)
+
+bazel_dep(name = "rules_go", version = "0.46.0", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "rules_pkg", version = "0.10.1")
+bazel_dep(name = "rules_oci", version = "1.7.2")
+bazel_dep(name = "gazelle", version = "0.35.0", repo_name = "bazel_gazelle")
+bazel_dep(name = "com_github_pedrobarco_gazelle_oci", version = "")
+local_path_override(
+    module_name = "com_github_pedrobarco_gazelle_oci",
+    path = "../../",
+)
+
+go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
+go_deps.from_file(go_mod = "//:go.mod")
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
+oci.pull(
+    name = "distroless_base",
+    digest = "sha256:ccaef5ee2f1850270d453fdf700a5392534f8d1a8ca2acda391fbb6a06b81c86",
+    image = "gcr.io/distroless/base",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64",
+    ],
+)
+use_repo(oci, "distroless_base")
