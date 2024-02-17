@@ -133,7 +133,7 @@ func (e *ociImageLang) GenerateRules(args language.GenerateArgs) language.Genera
 			image := rule.NewRule("oci_image", "image")
 			image.SetAttr("base", "@distroless_base")
 			image.SetAttr("entrypoint", []string{"/" + r.Name()})
-			image.SetAttr("tars", []string{":" + r.Name()})
+			image.SetAttr("tars", []string{":" + layer.Name()})
 
 			rules = append(rules, layer, image)
 			imports = append(imports, nil, nil)

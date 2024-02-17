@@ -121,3 +121,6 @@ fabric.properties
 
 # User-specific .bazelrc
 user.bazelrc
+
+# Covers gazelle generation tests
+!BUILD.out

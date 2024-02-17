@@ -1,0 +1,28 @@
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image")
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "oci_go_image_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/pedrobarco/gazelle_oci/testdata/oci_go_image",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "oci_go_image",
+    embed = [":oci_go_image_lib"],
+    visibility = ["//visibility:public"],
+)
+
+pkg_tar(
+    name = "oci_go_image_layer",
+    srcs = [":oci_go_image"],
+)
+
+oci_image(
+    name = "image",
+    base = "@distroless_base",
+    entrypoint = ["/oci_go_image"],
+    tars = [":oci_go_image_layer"],
+)
