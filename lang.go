@@ -24,6 +24,14 @@ var kinds = map[string]rule.KindInfo{
 		NonEmptyAttrs:  map[string]bool{"tars": true, "base": true, "entrypoint": true},
 		MergeableAttrs: map[string]bool{"tars": true},
 	},
+	"platform_transition_filegroup": {
+		NonEmptyAttrs:  map[string]bool{"srcs": true},
+		MergeableAttrs: map[string]bool{"srcs": true, "target_platfrom": true},
+	},
+	"oci_tarball": {
+		NonEmptyAttrs:  map[string]bool{"image": true},
+		MergeableAttrs: map[string]bool{"repo_tags": true},
+	},
 }
 
 type ociImageLang struct{}
@@ -135,8 +143,20 @@ func (e *ociImageLang) GenerateRules(args language.GenerateArgs) language.Genera
 			image.SetAttr("entrypoint", []string{"/" + r.Name()})
 			image.SetAttr("tars", []string{":" + layer.Name()})
 
-			rules = append(rules, layer, image)
-			imports = append(imports, nil, nil)
+			transition := rule.NewRule("platform_transition_filegroup", "transitioned_image")
+			transition.SetAttr("srcs", []string{":" + image.Name()})
+			transition.SetAttr("target_platform", SelectToolchain{
+				"@platforms//cpu:arm64":  "@io_bazel_rules_go//go/toolchain:linux_arm64",
+				"@platforms//cpu:x86_64": "@io_bazel_rules_go//go/toolchain:linux_amd64",
+			})
+
+			tarball := rule.NewRule("oci_tarball", "tarball")
+			tarball.SetAttr("image", ":"+transition.Name())
+			// TODO: support directive to configure registry path
+			tarball.SetAttr("repo_tags", []string{r.Name() + ":latest"})
+
+			rules = append(rules, layer, image, transition, tarball)
+			imports = append(imports, nil, nil, nil, nil)
 		default:
 			continue
 		}
@@ -161,7 +181,11 @@ func (e *ociImageLang) Loads() []rule.LoadInfo {
 		},
 		{
 			Name:    "@rules_oci//oci:defs.bzl",
-			Symbols: []string{"oci_image"},
+			Symbols: []string{"oci_image", "oci_tarball"},
+		},
+		{
+			Name:    "@aspect_bazel_lib//lib:transitions.bzl",
+			Symbols: []string{"platform_transition_filegroup"},
 		},
 	}
 }

@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "ea9ee43b48a4f35466390077d96382289e355008d5af27473645e85cd6cc2d40",
+  "moduleFileHash": "a99ec0046474d2e42c8e0b8fbd6fea06050300c1f408fae24f19a9d315c1ae4f",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -33,7 +33,9 @@
             "line": 9,
             "column": 24
           },
-          "imports": {},
+          "imports": {
+            "com_github_bazelbuild_buildtools": "com_github_bazelbuild_buildtools"
+          },
           "devImports": [],
           "tags": [
             {
@@ -1079,7 +1081,7 @@
       "general": {
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
-          "@@//:go.mod": "63a48d6d6e0e1dbacbaa0eff8cb6587b6e1f42106c71f00da77ffacb4161dc90",
+          "@@//:go.mod": "56e34bf533d73aa6fa5750e91365409047b138d48263c95c47e86c5cab79bdcf",
           "@@rules_go~0.46.0//:go.sum": "d56fdb19b21a5f12bcf625c49432371ac39c2def0f564098fbda107f7c080f40",
           "@@//:go.sum": "5aad70ba7072e7686070bf849fb034f98b74bc6460ce8be9957df10f1fac576b",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
@@ -1433,7 +1435,9 @@
           }
         },
         "moduleExtensionMetadata": {
-          "explicitRootModuleDirectDeps": [],
+          "explicitRootModuleDirectDeps": [
+            "com_github_bazelbuild_buildtools"
+          ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO"
         },
