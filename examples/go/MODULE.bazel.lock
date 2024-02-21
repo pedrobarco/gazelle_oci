@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "80c0ecedb6eb3b3d136c1f7441c4c028d1f98b9981debb9b8643f9ba4b79d7dd",
+  "moduleFileHash": "4d84021820b7619c43c81574bcc18fe4f7db16b494ec333a26e34d5ce8ad045a",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -31,7 +31,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 17,
+            "line": 18,
             "column": 24
           },
           "imports": {},
@@ -45,7 +45,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 18,
+                "line": 19,
                 "column": 18
               }
             }
@@ -59,7 +59,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 20,
+            "line": 21,
             "column": 20
           },
           "imports": {
@@ -81,7 +81,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 21,
+                "line": 22,
                 "column": 9
               }
             }
@@ -92,6 +92,7 @@
       ],
       "deps": {
         "aspect_bazel_lib": "aspect_bazel_lib@2.4.1",
+        "container_structure_test": "container_structure_test@1.16.0",
         "io_bazel_rules_go": "rules_go@0.46.0",
         "rules_pkg": "rules_pkg@0.10.1",
         "rules_oci": "rules_oci@1.7.2",
@@ -249,6 +250,58 @@
             "https://bcr.bazel.build/modules/aspect_bazel_lib/2.4.1/patches/module_dot_bazel_version.patch": "sha256-tPDEVxJAVDPISOyyUiiT6M0OSGLtknZvIQGUG5oh9oM="
           },
           "remote_patch_strip": 1
+        }
+      }
+    },
+    "container_structure_test@1.16.0": {
+      "name": "container_structure_test",
+      "version": "1.16.0",
+      "key": "container_structure_test@1.16.0",
+      "repoName": "container_structure_test",
+      "executionPlatformsToRegister": [],
+      "toolchainsToRegister": [
+        "@structure_test_toolchains//:all"
+      ],
+      "extensionUsages": [
+        {
+          "extensionBzlFile": "@container_structure_test//:repositories.bzl",
+          "extensionName": "extension",
+          "usingModule": "container_structure_test@1.16.0",
+          "location": {
+            "file": "https://bcr.bazel.build/modules/container_structure_test/1.16.0/MODULE.bazel",
+            "line": 14,
+            "column": 20
+          },
+          "imports": {
+            "structure_test_toolchains": "structure_test_toolchains"
+          },
+          "devImports": [],
+          "tags": [],
+          "hasDevUseExtension": false,
+          "hasNonDevUseExtension": true
+        }
+      ],
+      "deps": {
+        "aspect_bazel_lib": "aspect_bazel_lib@2.4.1",
+        "bazel_skylib": "bazel_skylib@1.5.0",
+        "platforms": "platforms@0.0.8",
+        "bazel_tools": "bazel_tools@_",
+        "local_config_platform": "local_config_platform@_"
+      },
+      "repoSpec": {
+        "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "ruleClassName": "http_archive",
+        "attributes": {
+          "name": "container_structure_test~1.16.0",
+          "urls": [
+            "https://github.com/GoogleContainerTools/container-structure-test/archive/18d9b2bcd2cbee1ab8df7c232ef6b7cddff9708a.zip"
+          ],
+          "integrity": "sha256-bl48uxXyeFxlKCKlbgyGsUtjCmo6QQyInnGNWA8sGac=",
+          "strip_prefix": "container-structure-test-18d9b2bcd2cbee1ab8df7c232ef6b7cddff9708a",
+          "remote_patches": {
+            "https://bcr.bazel.build/modules/container_structure_test/1.16.0/patches/module_dot_bazel.patch": "sha256-XvjiOZuN3y2tj5SJY6ws5H6VrIsuLC1Bdh3xw6qKeMs="
+          },
+          "remote_patch_strip": 0
         }
       }
     },
@@ -2171,6 +2224,81 @@
             "ruleClassName": "sh_config",
             "attributes": {
               "name": "bazel_tools~sh_configure_extension~local_config_sh"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
+    "@@container_structure_test~1.16.0//:repositories.bzl%extension": {
+      "general": {
+        "bzlTransitiveDigest": "/vl5vOyGN/nxHtUF3SxoDZnTDgDklt4HUpLQD5LE8+k=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "structure_test_st_linux_i386": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_linux_i386",
+              "platform": "linux_i386"
+            }
+          },
+          "structure_test_st_linux_s390x": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_linux_s390x",
+              "platform": "linux_s390x"
+            }
+          },
+          "structure_test_st_linux_amd64": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_linux_amd64",
+              "platform": "linux_amd64"
+            }
+          },
+          "structure_test_st_darwin_arm64": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_darwin_arm64",
+              "platform": "darwin_arm64"
+            }
+          },
+          "structure_test_st_windows_amd64": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_windows_amd64",
+              "platform": "windows_amd64"
+            }
+          },
+          "structure_test_st_darwin_amd64": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_darwin_amd64",
+              "platform": "darwin_amd64"
+            }
+          },
+          "structure_test_toolchains": {
+            "bzlFile": "@@container_structure_test~1.16.0//bazel:toolchains_repo.bzl",
+            "ruleClassName": "toolchains_repo",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_toolchains",
+              "toolchain_type": "@container_structure_test//bazel:structure_test_toolchain_type",
+              "toolchain": "@structure_test_st_{platform}//:structure_test_toolchain"
+            }
+          },
+          "structure_test_st_linux_arm64": {
+            "bzlFile": "@@container_structure_test~1.16.0//:repositories.bzl",
+            "ruleClassName": "structure_test_repositories",
+            "attributes": {
+              "name": "container_structure_test~1.16.0~extension~structure_test_st_linux_arm64",
+              "platform": "linux_arm64"
             }
           }
         },
