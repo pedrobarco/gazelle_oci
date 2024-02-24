@@ -1,0 +1,12 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "rule",
+    srcs = ["expr.go"],
+    importpath = "github.com/pedrobarco/gazelle_oci/internal/rule",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_bazelbuild_buildtools//build",
+    ],
+)

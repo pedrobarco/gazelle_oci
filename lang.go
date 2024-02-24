@@ -2,6 +2,7 @@ package oci
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"slices"
 	"strings"
@@ -12,6 +13,8 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/pedrobarco/gazelle_oci/internal/module"
+	myrule "github.com/pedrobarco/gazelle_oci/internal/rule"
 )
 
 const (
@@ -26,12 +29,13 @@ const (
 )
 
 type ociConfig struct {
-	BaseImageSet map[string]label.Label
+	baseImageSet         map[string]label.Label
+	moduleToApparentName func(string) string
 }
 
 var langs = []string{"go", "*"}
 
-// SupportsLang returns whether the lang atg is recognized by the version of
+// SupportsLang returns whether the provided lang is recognized by the version of
 // gazelle_oci being used. This avoids incompatibility between new versions of
 // Gazelle and old version of gazelle_oci.
 func (cfg *ociConfig) SupportsLang(lang string) bool {
@@ -40,15 +44,30 @@ func (cfg *ociConfig) SupportsLang(lang string) bool {
 
 // GetBaseImage returns the label to be used as the base image for oci_image.
 func (cfg *ociConfig) GetBaseImage(lang string) label.Label {
-	if v, ok := cfg.BaseImageSet[lang]; ok {
+	if v, ok := cfg.baseImageSet[lang]; ok {
 		return v
 	}
 
-	if v, ok := cfg.BaseImageSet["*"]; ok {
+	if v, ok := cfg.baseImageSet["*"]; ok {
 		return v
 	}
 
 	return label.NoLabel
+}
+
+// GetRepoName returns the apparent name for the original repo.
+func (cfg *ociConfig) GetRepoName(repo string) string {
+	name := cfg.moduleToApparentName(repo)
+	if name == "" {
+		switch repo {
+		case "rules_go":
+			// The legacy name used in WORKSPACE
+			return "io_bazel_rules_go"
+		default:
+			return repo
+		}
+	}
+	return name
 }
 
 var kinds = map[string]rule.KindInfo{
@@ -73,6 +92,7 @@ var kinds = map[string]rule.KindInfo{
 type ociImageLang struct{}
 
 var _ language.Language = (*ociImageLang)(nil)
+var _ language.ModuleAwareLanguage = (*ociImageLang)(nil)
 
 func NewLanguage() language.Language {
 	return &ociImageLang{}
@@ -114,16 +134,22 @@ func (e *ociImageLang) KnownDirectives() []string {
 // existing build file.
 func (e *ociImageLang) Configure(c *config.Config, rel string, f *rule.File) {
 	var cfg *ociConfig
-
 	if _, ok := c.Exts[e.Name()]; !ok {
 		cfg = &ociConfig{
-			BaseImageSet: make(map[string]label.Label),
+			baseImageSet: make(map[string]label.Label),
 		}
 	} else {
 		cfg = e.GetConfig(c)
 	}
-
 	c.Exts[e.Name()] = cfg
+
+	if rel == "" {
+		moduleToApparentName, err := module.ExtractModuleToApparentNameMapping(c.RepoRoot)
+		if err != nil {
+			log.Fatalf("could not extract module apparent names: %v", err)
+		}
+		cfg.moduleToApparentName = moduleToApparentName
+	}
 
 	if f == nil {
 		return
@@ -152,7 +178,7 @@ func (e *ociImageLang) Configure(c *config.Config, rel string, f *rule.File) {
 				)
 			}
 
-			cfg.BaseImageSet[lang] = val
+			cfg.baseImageSet[lang] = val
 		}
 	}
 }
@@ -238,18 +264,20 @@ func (e *ociImageLang) GenerateRules(args language.GenerateArgs) language.Genera
 			result.Gen = append(result.Gen, image)
 			result.Imports = append(result.Imports, struct{}{})
 
+			rulesGoRepoName := cfg.GetRepoName("rules_go")
+
 			transition := rule.NewRule("platform_transition_filegroup", "transitioned_image")
 			transition.SetAttr("srcs", []string{":" + image.Name()})
-			transition.SetAttr("target_platform", SelectToolchain{
-				"@platforms//cpu:arm64":  "@io_bazel_rules_go//go/toolchain:linux_arm64",
-				"@platforms//cpu:x86_64": "@io_bazel_rules_go//go/toolchain:linux_amd64",
+			transition.SetAttr("target_platform", myrule.SelectToolchain{
+				"@platforms//cpu:arm64":  "@" + rulesGoRepoName + "//go/toolchain:linux_arm64",
+				"@platforms//cpu:x86_64": "@" + rulesGoRepoName + "//go/toolchain:linux_amd64",
 			})
 			result.Gen = append(result.Gen, transition)
 			result.Imports = append(result.Imports, struct{}{})
 
 			tarball := rule.NewRule("oci_tarball", "tarball")
 			tarball.SetAttr("image", ":"+transition.Name())
-			// TODO: support directive to configure registry path
+			// TODO: support directive to configure registry path and repo tags
 			tarball.SetAttr("repo_tags", []string{r.Name() + ":latest"})
 			result.Gen = append(result.Gen, tarball)
 			result.Imports = append(result.Imports, struct{}{})
@@ -267,23 +295,65 @@ func (e *ociImageLang) GenerateRules(args language.GenerateArgs) language.Genera
 //
 // Deprecated: Implement ModuleAwareLanguage's ApparentLoads.
 func (e *ociImageLang) Loads() []rule.LoadInfo {
-	return []rule.LoadInfo{
-		{
-			Name:    "@aspect_bazel_lib//lib:transitions.bzl",
-			Symbols: []string{"platform_transition_filegroup"},
-		},
-		{
-			Name:    "@rules_oci//oci:defs.bzl",
-			Symbols: []string{"oci_image", "oci_tarball"},
-		},
-		{
-			Name:    "@rules_pkg//pkg:tar.bzl",
-			Symbols: []string{"pkg_tar"},
-		},
-	}
+	panic("ApparentLoads should be called instead")
 }
 
 // Fix repairs deprecated usage of language-specific rules in f. This is
 // called before the file is indexed. Unless c.ShouldFix is true, fixes
 // that delete or rename rules should not be performed.
 func (e *ociImageLang) Fix(c *config.Config, f *rule.File) {}
+
+// ApparentLoads returns .bzl files and symbols they define. Every rule
+// generated by GenerateRules, now or in the past, should be loadable from
+// one of these files.
+//
+// The moduleToApparentName argument is a function that resolves a given
+// Bazel module name to the apparent repository name configured for this
+// module in the MODULE.bazel file, or the empty string if there is no such
+// module or the MODULE.bazel file doesn't exist. Languages should use the
+// non-empty value returned by this function to form the repository part of
+// the load statements they return and fall back to using the legacy
+// WORKSPACE name otherwise.
+//
+// See https://bazel.build/external/overview#concepts for more information
+// on repository names.
+//
+// Example: For a project with these lines in its MODULE.bazel file:
+//
+//	bazel_dep(name = "rules_go", version = "0.38.1", repo_name = "my_rules_go")
+//	bazel_dep(name = "gazelle", version = "0.27.0")
+//
+// moduleToApparentName["rules_go"] == "my_rules_go"
+// moduleToApparentName["gazelle"] == "gazelle"
+// moduleToApparentName["foobar"] == ""
+func (*ociImageLang) ApparentLoads(moduleToApparentName func(string) string) []rule.LoadInfo {
+	rulesOci := moduleToApparentName("rules_oci")
+	if rulesOci == "" {
+		rulesOci = "rules_oci"
+	}
+
+	aspectBazelLib := moduleToApparentName("aspect_bazel_lib")
+	if aspectBazelLib == "" {
+		aspectBazelLib = "aspect_bazel_lib"
+	}
+
+	rulesPkg := moduleToApparentName("rules_pkg")
+	if rulesPkg == "" {
+		rulesPkg = "rules_pkg"
+	}
+
+	return []rule.LoadInfo{
+		{
+			Name:    fmt.Sprintf("@%s//lib:transitions.bzl", aspectBazelLib),
+			Symbols: []string{"platform_transition_filegroup"},
+		},
+		{
+			Name:    fmt.Sprintf("@%s//oci:defs.bzl", rulesOci),
+			Symbols: []string{"oci_image", "oci_tarball"},
+		},
+		{
+			Name:    fmt.Sprintf("@%s//pkg:tar.bzl", rulesPkg),
+			Symbols: []string{"pkg_tar"},
+		},
+	}
+}
