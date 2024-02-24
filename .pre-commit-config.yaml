@@ -5,7 +5,7 @@ repos:
       - id: go-mod-tidy-repo
 
   - repo: https://github.com/golangci/golangci-lint
-    rev: v1.56.1
+    rev: v1.56.2
     hooks:
       - id: golangci-lint
 
@@ -18,7 +18,7 @@ repos:
         stages: [commit]
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.14.1
+    rev: v3.15.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
