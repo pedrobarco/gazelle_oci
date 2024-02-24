@@ -1,14 +1,2 @@
-load("@rules_go//go:def.bzl", "go_binary", "go_library")
-
-go_library(
-    name = "oci_go_image_lib",
-    srcs = ["main.go"],
-    importpath = "github.com/pedrobarco/gazelle_oci/testdata/oci_go_image",
-    visibility = ["//visibility:private"],
-)
-
-go_binary(
-    name = "oci_go_image",
-    embed = [":oci_go_image_lib"],
-    visibility = ["//visibility:public"],
-)
+# gazelle:prefix example.com/m
+# gazelle:oci_base_image go @distroless_base

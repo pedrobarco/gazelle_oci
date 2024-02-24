@@ -1,17 +1,16 @@
-load("@bazel_gazelle//:def.bzl", "gazelle_binary", "gazelle_generation_test")
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle_binary", "gazelle_generation_test")
 
 gazelle_binary(
-    name = "gazelle",
-    languages = [
+    name = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
         "//:gazelle_oci",
     ],
-    visibility = ["//visibility:private"],
 )
 
 [
     gazelle_generation_test(
         name = file[0:-len("/WORKSPACE")],
-        gazelle_binary = ":gazelle",
+        gazelle_binary = ":gazelle_bin",
         gazelle_timeout_seconds = 30,
         test_data = glob(
             include = [file[0:-len("/WORKSPACE")] + "/**"],

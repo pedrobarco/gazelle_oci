@@ -1,4 +1,4 @@
-package ocigoimage
+package main
 
 import "fmt"
 
