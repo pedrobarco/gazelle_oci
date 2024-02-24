@@ -1,0 +1,2 @@
+# gazelle:prefix example.com/m
+# gazelle:oci_base_image go @distroless_base
