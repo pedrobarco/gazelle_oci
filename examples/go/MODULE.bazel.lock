@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "4d84021820b7619c43c81574bcc18fe4f7db16b494ec333a26e34d5ce8ad045a",
+  "moduleFileHash": "36fb9d57841bbee4c61fe637ca2fcb84afab7bf63aa957d6330728e9e156feaa",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -26,7 +26,7 @@
       "toolchainsToRegister": [],
       "extensionUsages": [
         {
-          "extensionBzlFile": "@bazel_gazelle//:extensions.bzl",
+          "extensionBzlFile": "@gazelle//:extensions.bzl",
           "extensionName": "go_deps",
           "usingModule": "<root>",
           "location": {
@@ -93,10 +93,10 @@
       "deps": {
         "aspect_bazel_lib": "aspect_bazel_lib@2.4.1",
         "container_structure_test": "container_structure_test@1.16.0",
-        "io_bazel_rules_go": "rules_go@0.46.0",
+        "rules_go": "rules_go@0.46.0",
         "rules_pkg": "rules_pkg@0.10.1",
         "rules_oci": "rules_oci@1.7.2",
-        "bazel_gazelle": "gazelle@0.35.0",
+        "gazelle": "gazelle@0.35.0",
         "com_github_pedrobarco_gazelle_oci": "com_github_pedrobarco_gazelle_oci@_",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
