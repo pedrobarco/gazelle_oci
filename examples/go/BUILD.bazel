@@ -12,6 +12,8 @@ gazelle_binary(
     ],
 )
 
+# gazelle:oci_base_image go @distroless_base
+
 gazelle(
     name = "gazelle",
     gazelle = ":gazelle_bin",
@@ -37,7 +39,7 @@ pkg_tar(
 
 oci_image(
     name = "image",
-    base = "@distroless_base",
+    base = "@distroless_base//:distroless_base",
     entrypoint = ["/m"],
     tars = [":m_layer"],
 )
