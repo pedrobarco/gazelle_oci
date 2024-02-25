@@ -13,7 +13,7 @@
     "compatibilityMode": "ERROR"
   },
   "localOverrideHashes": {
-    "com_github_pedrobarco_gazelle_oci": "2c21fc8b0d4ce0c5dff7c97d1e026ed8f7a9868c4d03d12ff5bfcb6fcda6ac8c",
+    "com_github_pedrobarco_gazelle_oci": "4ac931e0016a238582913b0d072ad64f48ccad46358d8a919ceae1012cc5a13f",
     "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787"
   },
   "moduleDepGraph": {
@@ -645,7 +645,7 @@
           "usingModule": "com_github_pedrobarco_gazelle_oci@_",
           "location": {
             "file": "@@com_github_pedrobarco_gazelle_oci~override//:MODULE.bazel",
-            "line": 9,
+            "line": 17,
             "column": 24
           },
           "imports": {
@@ -661,7 +661,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@com_github_pedrobarco_gazelle_oci~override//:MODULE.bazel",
-                "line": 10,
+                "line": 18,
                 "column": 18
               }
             }
@@ -671,7 +671,7 @@
         }
       ],
       "deps": {
-        "io_bazel_rules_go": "rules_go@0.46.0",
+        "rules_go": "rules_go@0.46.0",
         "gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"

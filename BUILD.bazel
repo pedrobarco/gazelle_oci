@@ -1,5 +1,5 @@
 load("@gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@rules_go//go:def.bzl", "go_library")
 
 # gazelle:exclude testdata/*
 # gazelle:exclude examples/*

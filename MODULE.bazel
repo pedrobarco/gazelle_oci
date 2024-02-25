@@ -3,8 +3,16 @@ module(
     version = "1.0",
 )
 
-bazel_dep(name = "rules_go", version = "0.46.0", repo_name = "io_bazel_rules_go")
+bazel_dep(name = "rules_go", version = "0.46.0")
 bazel_dep(name = "gazelle", version = "0.35.0")
+
+# waiting for release 0.36.0 to include
+# https://github.com/bazelbuild/bazel-gazelle/pull/1743
+git_override(
+    module_name = "gazelle",
+    commit = "2a2f5b8ca1da21e2dbfa1b60eb87c175fdd09bfe",
+    remote = "https://github.com/bazelbuild/bazel-gazelle",
+)
 
 go_deps = use_extension("@gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
