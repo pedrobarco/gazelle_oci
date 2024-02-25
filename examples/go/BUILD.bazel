@@ -1,22 +1,15 @@
 load("@aspect_bazel_lib//lib:transitions.bzl", "platform_transition_filegroup")
 load("@container_structure_test//:defs.bzl", "container_structure_test")
-load("@gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@gazelle//:def.bzl", "gazelle")
 load("@rules_go//go:def.bzl", "go_binary", "go_library")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = DEFAULT_LANGUAGES + [
-        "@com_github_pedrobarco_gazelle_oci//:gazelle_oci",
-    ],
-)
 
 # gazelle:oci_base_image go @distroless_base
 
 gazelle(
     name = "gazelle",
-    gazelle = ":gazelle_bin",
+    gazelle = "@com_github_pedrobarco_gazelle_oci//:gazelle_binary",
 )
 
 go_library(
