@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "a99ec0046474d2e42c8e0b8fbd6fea06050300c1f408fae24f19a9d315c1ae4f",
+  "moduleFileHash": "2c21fc8b0d4ce0c5dff7c97d1e026ed8f7a9868c4d03d12ff5bfcb6fcda6ac8c",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -25,7 +25,7 @@
       "toolchainsToRegister": [],
       "extensionUsages": [
         {
-          "extensionBzlFile": "@bazel_gazelle//:extensions.bzl",
+          "extensionBzlFile": "@gazelle//:extensions.bzl",
           "extensionName": "go_deps",
           "usingModule": "<root>",
           "location": {
@@ -57,7 +57,7 @@
       ],
       "deps": {
         "io_bazel_rules_go": "rules_go@0.46.0",
-        "bazel_gazelle": "gazelle@0.35.0",
+        "gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
       }
