@@ -1,16 +1,9 @@
-load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle_binary", "gazelle_generation_test")
-
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = DEFAULT_LANGUAGES + [
-        "//:gazelle_oci",
-    ],
-)
+load("@gazelle//:def.bzl", "gazelle_generation_test")
 
 [
     gazelle_generation_test(
         name = file[0:-len("/WORKSPACE")],
-        gazelle_binary = ":gazelle_bin",
+        gazelle_binary = "//:gazelle_binary",
         gazelle_timeout_seconds = 30,
         test_data = glob(
             include = [file[0:-len("/WORKSPACE")] + "/**"],

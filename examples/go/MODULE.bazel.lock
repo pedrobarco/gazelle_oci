@@ -13,7 +13,7 @@
     "compatibilityMode": "ERROR"
   },
   "localOverrideHashes": {
-    "com_github_pedrobarco_gazelle_oci": "a99ec0046474d2e42c8e0b8fbd6fea06050300c1f408fae24f19a9d315c1ae4f",
+    "com_github_pedrobarco_gazelle_oci": "4ac931e0016a238582913b0d072ad64f48ccad46358d8a919ceae1012cc5a13f",
     "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787"
   },
   "moduleDepGraph": {
@@ -640,12 +640,12 @@
       "toolchainsToRegister": [],
       "extensionUsages": [
         {
-          "extensionBzlFile": "@bazel_gazelle//:extensions.bzl",
+          "extensionBzlFile": "@gazelle//:extensions.bzl",
           "extensionName": "go_deps",
           "usingModule": "com_github_pedrobarco_gazelle_oci@_",
           "location": {
             "file": "@@com_github_pedrobarco_gazelle_oci~override//:MODULE.bazel",
-            "line": 9,
+            "line": 17,
             "column": 24
           },
           "imports": {
@@ -661,7 +661,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@com_github_pedrobarco_gazelle_oci~override//:MODULE.bazel",
-                "line": 10,
+                "line": 18,
                 "column": 18
               }
             }
@@ -671,8 +671,8 @@
         }
       ],
       "deps": {
-        "io_bazel_rules_go": "rules_go@0.46.0",
-        "bazel_gazelle": "gazelle@0.35.0",
+        "rules_go": "rules_go@0.46.0",
+        "gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
       }
@@ -2224,6 +2224,27 @@
             "ruleClassName": "sh_config",
             "attributes": {
               "name": "bazel_tools~sh_configure_extension~local_config_sh"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
+    "@@bazel_tools//tools/test:extensions.bzl%remote_coverage_tools_extension": {
+      "general": {
+        "bzlTransitiveDigest": "y48q5zUu2oMiYv7yUyi7rFB0wt14eqiF/RQcWT6vP7I=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "remote_coverage_tools": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "bazel_tools~remote_coverage_tools_extension~remote_coverage_tools",
+              "sha256": "7006375f6756819b7013ca875eab70a541cf7d89142d9c511ed78ea4fefa38af",
+              "urls": [
+                "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.6.zip"
+              ]
             }
           }
         },
