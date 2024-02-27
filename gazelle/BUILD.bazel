@@ -1,0 +1,22 @@
+load("@rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "gazelle",
+    srcs = [
+        "config.go",
+        "lang.go",
+        "resolve.go",
+    ],
+    importpath = "github.com/pedrobarco/gazelle_oci/gazelle",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//internal/module",
+        "//internal/rule",
+        "@gazelle//config:go_default_library",
+        "@gazelle//label:go_default_library",
+        "@gazelle//language:go_default_library",
+        "@gazelle//repo:go_default_library",
+        "@gazelle//resolve:go_default_library",
+        "@gazelle//rule:go_default_library",
+    ],
+)
