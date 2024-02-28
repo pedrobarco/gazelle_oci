@@ -70,7 +70,7 @@ gazelle extension.
 <!-- TODO: directives table -->
 
 For detailed usage instructions examples, refer to the documentation
-provided in the `examples/` directory of this repository.
+provided in the [`examples/`](examples/) directory of this repository.
 
 ## Contributing
 
