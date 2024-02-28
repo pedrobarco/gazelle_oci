@@ -48,9 +48,6 @@ To use this extension, follow these steps:
    ```python
    load("@gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 
-   # gazelle:exclude testdata/*
-   # gazelle:exclude examples/*
-
    gazelle(name = "gazelle")
 
    gazelle_binary(
